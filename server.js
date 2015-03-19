@@ -35,18 +35,18 @@ http.createServer(function (req, res) {
                 		
 				var post = qs.parse(POST);
 				//console.log(post);
-				var data = eval('('+post.data+')');
+				
 				
 				switch(post.control){
 					case 'setSources':
 						//console.log(post.data);
 						
-						
+						var data = eval('('+post.data+')');
 						
 						for(s in data){
-							lpmtOscClient.send('/active/set', s);
+							lpmtOscClient.send('/active/set', parseInt(s));
 							lpmtOscClient.send('/active/cam/show', 1);
-							lpmtOscClient.send('/active/cam/num', data[s]);
+							lpmtOscClient.send('/active/cam/num', parseInt(data[s]));
 							
 							console.log("Source "+data[s]+" to quad #"+s);
 						}
@@ -67,7 +67,10 @@ http.createServer(function (req, res) {
 					
 					case 'fireFlux':
 						
-						console.log(data);
+						console.log(post.data);
+						console.log(post);
+						
+						fluxusOscClient.send(post.data);
 						
 						var result = {
 							
